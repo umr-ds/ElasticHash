@@ -1,0 +1,1 @@
+python3 import_dir.py --images_dir=/app/static/images

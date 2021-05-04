@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="static/css/natural-gallery-js/natural-gallery.full.css">
+    <link rel="stylesheet" href="static/css/natural-gallery-js/themes/natural.css">
+    <link rel="stylesheet" href="static/css/additional.css">
+    <title>Similarity Search for Images</title>
+</head>
+<body>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="static/js/natural-gallery-js/natural-gallery.full.js" defer></script>
+
+<script>
+    function switchUseURL() {
+        var useURL = document.getElementById("useURL").value;
+        if (useURL == true) {
+            document.getElementById("useURL").value = 0;
+        } else {
+            document.getElementById("useURL").value = 1;
+
+        }
+    }
+</script>
+
+
+<header>
+    <form action="/" method="post" enctype="multipart/form-data" id="imgUpload">
+
+        <input type="hidden" name="useURL" id="useURL" value="{{ useURL }}">
+        <div class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid text-primary">
+                <div class="row">
+                    <div class="col">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-upload-tab" data-toggle="tab" href="#nav-upload"
+                               role="tab"
+                               aria-controls="nav-upload" aria-selected="true" onclick="switchUseURL()">Upload</a>
+                            <a class="nav-item nav-link" id="nav-url-tab" data-toggle="tab" href="#nav-url"
+                               role="tab"
+                               aria-controls="nav-url" aria-selected="false" onclick="switchUseURL()">URL</a></div>
+                        <div class="tab-content pr-2 pl-2 searchbox" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-upload" role="tabpanel"
+                                 aria-labelledby="nav-upload-tab">
+                                <br/>
+                                <input type="file" placeholder="Please select an image for uploading"
+                                       name="upload"
+                                       id="upload"
+                                       class="form-control-file">
+                            </div>
+                            <div class="tab-pane fade" id="nav-url" role="tabpanel"
+                                 aria-labelledby="nav-url-tab"><br/>
+                                <input type="text" placeholder="Please enter URL to image" name="url" id="url"
+                                       class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <div class="form-group mx-sm-3 mb-2 text-center"><br/>
+                        <!-- <label for="maxResults" class="col-sm-2 col-form-label">Results</label> -->
+                        <input type="number" class="form-control" name="maxResults" aria-describedby="maxResultsHelp"
+                               value="{{ max_results }}" width="5">
+                        <small id="maxResultsHelp" class="form-text text-muted w-10">Maximum number of results</small>
+                    </div>
+                </div>
+
+                <div class="col text-center"><br/>
+                    <button type="submit" class="btn btn-primary align-text-bottom">Search similar images</button>
+                </div>
+                <div class="col">
+
+
+                </div>
+                <div class="text-right w-150">
+                    {% if query_image %}
+                    <div class="querycontainer">
+                        <img class="queryimage" id="queryimage" src="{{ query_image }}"/>
+                        <div class="querytext">query image</div>
+                    </div>
+                    <input type="hidden" name="previous_query" value="{{ query_image }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        function switchTabsIfUseURL() {
+            if (document.getElementById("useURL").value == true) {
+                document.getElementById("nav-upload-tab").setAttribute("aria-selected", "false");
+                document.getElementById("nav-upload-tab").classList.remove("active");
+                document.getElementById("nav-upload").classList.remove("active");
+                document.getElementById("nav-upload-tab").classList.remove("show");
+                document.getElementById("nav-url-tab").setAttribute("aria-selected", "true");
+                document.getElementById("nav-url-tab").classList.add("active");
+                document.getElementById("nav-url").classList.add("active");
+                document.getElementById("nav-url").classList.add("show");
+            }
+        }
+
+        switchTabsIfUseURL();
+
+        var options = {
+
+            rowHeight: 100,
+            itemsPerRow: 0,
+
+            // space between images
+            gap: 3,
+
+            // how many rows per page
+            //rowsPerPage: 10,
+
+            // hover, always and never
+            showLabels: 'hover',
+
+            // enable lightbox
+            lightbox: true,
+
+            // photosipw options
+            photoSwipeOptions: null,
+
+            // the number of rows to display when gallery initialises
+            minRowsAtStart: 4,
+
+            // is selectable?
+            selectable: false,
+
+            // the distance from the bottom of the gallery to offset the detection of the scroll event.
+            infiniteScrollOffset: 0
+        };
+
+        function getGallery(galleryElement, photoswipeRef) {
+            return new NaturalGallery.Natural(galleryElement, options, photoswipeRef)
+        }
+
+
+    </script>
+</header>
+<main>
+    <br/>
+    <div class="container-fluid">
+        {% block error %}{% endblock %}
+        {% block images %}{% endblock %}
+    </div>
+</main>
+</body>
+</html>
+
+
+
+

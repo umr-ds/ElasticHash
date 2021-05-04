@@ -1,0 +1,45 @@
+version: '2.3'
+
+services:
+
+  elasticsearch:
+    container_name: dh_es_experiments
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms768m -Xmx768m"
+      - "xpack.security.enabled=false"
+      - "discovery.type=single-node"
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data
+
+  experiments:
+    container_name: dh_experiments
+    build:
+      context: ./docker
+    restart: always
+    volumes:
+      - ./:/code
+
+  db:
+    image: postgres:11-alpine
+    container_name: dh_db
+    shm_size: 1g
+    restart: always
+    command: postgres -c max_wal_size=100000
+    environment:
+      POSTGRES_PASSWORD: oi_secure_pw
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./csv:/oi_csv
+      - ./import.sql:/import.sql
+      - ./db-data:/var/lib/postgresql/data
+
+  adminer:
+    container_name: dh_adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+
+

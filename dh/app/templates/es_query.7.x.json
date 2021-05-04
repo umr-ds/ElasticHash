@@ -1,0 +1,106 @@
+{
+  "query": {
+    "function_score": {
+      "boost_mode": "sum",
+      "score_mode": "sum",
+      "functions": [
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r0",
+                "subcode": $r0
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r1",
+                "subcode": $r1
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r2",
+                "subcode": $r2
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r3",
+                "subcode": $r3
+              }
+            }
+          },
+          "weight": 1
+        }
+      ],
+      "query": {
+        "constant_score": {
+          "boost": 0,
+          "filter": {
+            "bool": {
+              "minimum_should_match": 1,
+              "should": [
+                {
+                  "terms": {
+                    "f0": {
+                      "id": "$f0",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f1": {
+                      "id": "$f1",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f2": {
+                      "id": "$f2",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f3": {
+                      "id": "$f3",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.searchbox {
+    width: 300px;
+    height: 80px;
+    background-color: rgb(255, 255, 255);
+    border-right-color: rgb(222, 226, 230);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-left-color: rgb(222, 226, 230);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-bottom-color: rgb(222, 226, 230);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.queryimage {
+    height: 110px;
+    max-width: 300px;
+    border-radius: 3px;
+}
+
+.natural-gallery-js .figure {
+    border-radius: 2px;
+}
+
+.querytext{
+  background: none;
+  position: relative;
+  align: center;
+  text-shadow: 0px 0px 6px white;
+}
+
+.querycontainer {
+  position: relative;
+  text-align: center;
+}

@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/dh/elasticsearch/data/*
+/dh/models/*
+/experiments/csv/*
+/experiments/db-data/*
+/experiments/es-data/*
+/experiments/queries/val*
+/experiments/results/
+
+.idea

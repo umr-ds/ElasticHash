@@ -1,0 +1,58 @@
+version: '2.3'
+
+services:
+
+  app:
+    container_name: dh_app
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    depends_on:
+      - tf-serving
+    environment:
+      - TF_SERVING_HOST=tf-serving
+      - TF_SERVING_PORT=8501
+      - TF_MODELNAME=${TF_MODELNAME}
+      - GUNICORN_WORKERS=4
+    volumes:
+      - ./tools/:/tools # Needed only for import
+      # Uncomment and modify this line for indexing a local directory
+      # - path/to/mage_dir/:/app/static/images/
+    restart: always
+
+  nginx:
+    container_name: dh_nginx
+    image: nginx:1-alpine
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - ${APP_PORT}:80
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/templates/default.conf.template
+    #  - static-volume:/usr/share/nginx/html/static
+
+  tf-serving:
+    container_name: dh_tf-serving
+    image: tensorflow/serving:${TFS_TAG}
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${GPU_ID} #all
+      - MODEL_NAME=${TF_MODELNAME}
+    restart: always
+    # runtime: nvidia
+    volumes:
+      - ./models/1612964152/:/models/${TF_MODELNAME}/1
+
+  elasticsearch:
+    container_name: dh_elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms768m -Xmx768m"
+      - "xpack.security.enabled=false"
+      - "discovery.type=single-node"
+    volumes:
+      - ./elasticsearch/data/:/usr/share/elasticsearch/data
+
+#volumes:
+#  static-volume:

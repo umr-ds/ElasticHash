@@ -1,0 +1,110 @@
+{
+  "query": {
+    "function_score": {
+      "boost_mode": "sum",
+      "score_mode": "sum",
+      "functions": [
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r0",
+                "subcode": 2009879872187598162
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r1",
+                "subcode": -4665176433340921478
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r2",
+                "subcode": 2848899273214769298
+              }
+            }
+          },
+          "weight": 1
+        },
+        {
+          "script_score": {
+            "script": {
+              "id": "hd64",
+              "params": {
+                "field": "r3",
+                "subcode": 6591287222376755405
+              }
+            }
+          },
+          "weight": 1
+        }
+      ],
+      "query": {
+        "constant_score": {
+          "boost": 0,
+          "filter": {
+            "bool": {
+              "minimum_should_match": 1,
+              "should": [
+                {
+                  "terms": {
+                    "f0": {
+                      "type": "_doc",
+                      "id": "8715",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f1": {
+                      "type": "_doc",
+                      "id": "61323",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f2": {
+                      "type": "_doc",
+                      "id": "20284",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                },
+                {
+                  "terms": {
+                    "f3": {
+                      "type": "_doc",
+                      "id": "28397",
+                      "index": "nbs",
+                      "path": "nbs"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

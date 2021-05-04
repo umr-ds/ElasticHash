@@ -1,0 +1,7 @@
+flask
+requests
+gunicorn
+numpy
+pillow
+bitstring
+progressbar
