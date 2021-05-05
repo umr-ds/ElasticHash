@@ -55,13 +55,13 @@ class OpenImagesDB:
     def get_image(self, imageid):
         """
         Returns information for an imageid:
-        imageid, subset, originalurl, originalsize, thumbnail300kurl, downloaded
+        imageid, subset, originalurl, originalsize, thumbnail300kurl
         :param imageid:
         :return: (imageid: int, subset:{train, validation}, originalurl: str, originalsize: int,
-                 thumbnail300kurl: str, downloaded: bool)
+                 thumbnail300kurl: str)
         """
         self.cur.execute("""
-            SELECT imageid, subset, originalurl, originalsize, thumbnail300kurl, downloaded FROM images WHERE imageid=%s
+            SELECT imageid, subset, originalurl, originalsize, thumbnail300kurl FROM images WHERE imageid=%s
             -- Execution time : ~0.1 ms
         """, (imageid,))
         return self.cur.fetchone()
