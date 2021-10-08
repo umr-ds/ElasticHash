@@ -14,6 +14,6 @@ echo "Adding hamming distance function..."
 python3 add_hdist.py
 
 echo "Importing OpenImages codes..."
-python3 import_csv.py --es_reset_index --csv train.csv
-# python3 import_csv.py --csv val.csv
+python3 import_csv.py --es_reset_index --csv train.csv --cols id imageurl thumburl imagepath imageinfo
+# python3 import_csv.py --csv val.csv --cols id imageurl thumburl imagepath imageinfo
 

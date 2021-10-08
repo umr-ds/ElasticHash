@@ -1,4 +1,4 @@
-from util import allowed_file, batch_inference, parse_es_results, es_query_str, es_query, load_image
+from util import allowed_file, batch_inference, parse_es_results, es_query_str, es_query, load_image, monkeypatch_imghdr
 from config import Config as cfg
 import requests
 from flask import Flask, request, jsonify, render_template
@@ -26,6 +26,8 @@ def search():
     querytime = 0
     max_results = cfg.ES_MAX_RESULTS
     perform_search = False
+
+    imghdr.tests.extend(monkeypatch_imghdr())
 
     try:
         # Query image from results

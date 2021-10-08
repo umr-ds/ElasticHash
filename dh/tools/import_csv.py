@@ -212,7 +212,14 @@ if __name__ == '__main__':
         help='Column with id (starts with 0, default: 0)'
     )
 
-    parser.add_argument('-c', '--cols', choices=['id', 'imageurl', 'thumburl', 'imagepath'], nargs="*",
+    parser.add_argument(
+        '--col_imageinfo',
+        default=11,
+        type=int,
+        help='Column from where image info starts. As in OpenImages there are 4 columns: license, authorprofileurl,	author,	title (starts with 0, default: 12)'
+    )
+
+    parser.add_argument('-c', '--cols', choices=['id', 'imageurl', 'thumburl', 'imagepath', 'imageinfo'], nargs="*",
                         default=['id', 'imageurl', 'thumburl'],
                         help='Columns of CSV to use for import.')
 
@@ -249,6 +256,7 @@ if __name__ == '__main__':
     col_imageurl = args.col_imageurl
     col_thumburl = args.col_thumburl
     col_codes = args.col_codes
+    col_imageinfo = args.col_imageinfo
     cols = set(args.cols)
     method = args.method
 
@@ -342,6 +350,14 @@ if __name__ == '__main__':
                 d["imageurl"] = row[col_imageurl]
             if "thumburl" in cols:
                 d["thumburl"] = row[col_thumburl]
+            if "imageinfo" in cols:
+                d["imageinfo"] = True
+                d["license"] = row[col_imageinfo]
+                d["authorprofileurl"] = row[col_imageinfo+1]
+                d["author"] = row[col_imageinfo+2]
+                d["title"] = row[col_imageinfo+3]
+            else:
+                d["imageinfo"] = False
 
             batch += [d]
 

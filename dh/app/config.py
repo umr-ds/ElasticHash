@@ -18,7 +18,7 @@ class Config:
     LOCAL_IMAGES = get_env("LOCAL_IMAGES", False)
 
     # Elastic Search settings
-    ES_MAX_RESULTS = 2000
+    ES_MAX_RESULTS = 1000
     ES_URL = get_env("ES_URL", "http://elasticsearch:9200/es-retrieval/_search?size=")
 
     with open("/app/templates/es_query.7.x.json", 'r') as file:

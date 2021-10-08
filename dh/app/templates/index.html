@@ -1,87 +1,105 @@
 {% extends "base.html" %}
 
 {% block error %}
-{% if error %}
-<div class="alert alert-danger" role="alert">
-    <b>Error</b>
-    <br/>{{ error }}
-</div>
-{% elif display_welcome %}
-<div class="alert alert-primary" role="alert">
-    Please upload an image or enter a URL
-</div>
-{% else %}
-<div class="alert alert-success" role="alert">
-    {{ images|length }} images found, took {{ "%.2f"|format(time) }} seconds
-</div>
-{% endif %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <b>Error</b>
+            <br/>{{ error }}
+        </div>
+    {% elif display_welcome %}
+        <div class="alert alert-primary" role="alert">
+            Please upload an image or enter a URL
+        </div>
+    {% else %}
+        <div class="alert alert-success" role="alert">
+            {{ images|length }} images found, took {{ "%.2f"|format(time) }} seconds
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block images %}
-<div class="container-90perc">
-    <div id="gallery"></div>
-</div>
+    <div class="container-90perc">
+        <div id="gallery"></div>
+    </div>
 
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="pswp__bg"></div>
-    <div class="pswp__scroll-wrap">
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-        <div class="pswp__ui pswp__ui--hidden">
-            <div class="pswp__top-bar">
-                <div class="pswp__counter"></div>
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-window.addEventListener('load', function() {
+    <script>
+        window.addEventListener('load', function () {
 
-var elementRef = document.getElementById('gallery');
-var photoswipeRef = document.getElementsByClassName('pswp')[0];
-var gallery = getGallery(elementRef, photoswipeRef);
+            var elementRef = document.getElementById('gallery');
+            var photoswipeRef = document.getElementsByClassName('pswp')[0];
+            var gallery = getGallery(elementRef, photoswipeRef); // new NaturalGallery.Natural(galleryElement, options, photoswipeRef);
+            var items = [
+                    {% for image in images %}{
+                        thumbnailSrc: '{{ thumbs_url }}{{ image.thumbpath }}',
+                        thumbnailWidth: 125,
+                        thumbnailHeight: 94,
+                        enlargedSrc: '{{ images_url }}{{ image.imagepath }}',
+                        enlargedWidth: 786,
+                        enlargedHeight: 576,
+                        link: '/?imagePath={{ image.imagepath }}&maxResults={{ max_results }}',
+                        linkTarget: '_self',
+                        {% if image.imageinfo %}
+                            title: 'Title: <b>{{ image.imageinfo.title }}</b> <br /> Author: ' +
+                                '<a href={{ image.imageinfo.authorprofileurl }}>{{ image.imageinfo.author }}</a>' +
+                                ' (<a href={{ image.imageinfo.license }} >License</a>)' +
+                                '<br /><span class="small">This image is listed in ' +
+                                '<a href=https://storage.googleapis.com/openimages/web/index.html>' +
+                                'Open Images Dataset</a> as having a CC BY 2.0 license</span>' +
+                                '<br /><span class="progress-label">Similarity</span>' +
+                                '<div class="progress ">\n' +
+                                '  <div class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
+                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></div>\n' +
+                                '</div>',
+                        {% else %}
+                            title: 'ID: <b>{{ image.imageid }}</b>' +
+                                '<br /><span class="progress-label">Similarity</span>' +
+                                '<div class="progress ">\n' +
+                                '  <div class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
+                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></div>\n' +
+                                '</div>',
+                        {% endif %}
+                        color: '#ccc',
+                        },
+                    {% endfor %}
+            ];
+            gallery.setItems(items);
+            gallery.init();
 
-var items = [
-{% for image in images %}{
-        thumbnailSrc: '{{ thumbs_url }}{{ image.thumbpath }}',
-        thumbnailWidth: 125,
-        thumbnailHeight: 94,
-        enlargedSrc: '{{ images_url }}{{ image.imagepath }}',
-        enlargedWidth: 786,
-        enlargedHeight: 576,
-        link: '/?imagePath={{ image.imagepath }}&maxResults={{ max_results }}',
-        linkTarget: '_self',
-        title: '{{ image.imageid }} (d={{ 256 - image.score | int }})',
-        color: '#ccc'
-    },
-{% endfor %}
-];
+        })
 
-// insert images to the gallery
-gallery.setItems(items);
+    </script>
 
-})
-
-</script>
 {% endblock %}

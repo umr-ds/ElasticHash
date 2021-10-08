@@ -1,14 +1,16 @@
-from string import Template
-from config import Config as cfg
-import json
-from io import BytesIO
-import numpy as np
-import requests
-from bitstring import BitArray
+import argparse
 import base64
 import io
+import json
+from io import BytesIO
+from string import Template
+
+import numpy as np
+import requests
 from PIL import Image as pil_image
-import argparse
+from bitstring import BitArray
+
+from config import Config as cfg
 
 
 def get_hashcode_str(floatarr):
@@ -156,6 +158,13 @@ def parse_es_results(json_str):
                 d["thumbpath"] = h["_source"]["thumburl"]
             else:
                 d["thumbpath"] = h["_source"]["imageurl"]
+        if "imageinfo" in h["_source"]:
+            d["imageinfo"] = {
+                "license": h["_source"]["license"],
+                "authorprofileurl": h["_source"]["authorprofileurl"],
+                "author": h["_source"]["author"],
+                "title": h["_source"]["title"],
+            }
         imgs.append(d)
     return imgs
 
@@ -229,3 +238,24 @@ def es_query_str(code_dict):
 def es_query(query, max_results):
     return requests.post(cfg.ES_URL + str(min(cfg.ES_MAX_RESULTS, max_results)), data=query,
                          headers={"Content-Type": "application/json"}, verify=False).text
+
+
+def monkeypatch_imghdr():
+    """
+    Monkey patch bug in imghdr which causes valid JPEG images to be classified as 'None' type.
+    Return additional testing methods to patch the current imghdr instance."""
+    return test_small_header_jpeg, test_exif_jfif
+
+
+def test_small_header_jpeg(h, f):
+    """JPEG data with a small header"""
+    jpeg_bytecode = b'\xff\xd8\xff\xdb\x00C\x00\x08\x06\x06' \
+                    b'\x07\x06\x05\x08\x07\x07\x07\t\t\x08\n\x0c\x14\r\x0c\x0b\x0b\x0c\x19\x12\x13\x0f'
+    if len(h) >= 32 and h[5] == 67 and h[:32] == jpeg_bytecode:
+        return 'jpeg'
+
+
+def test_exif_jfif(h, f):
+    """JPEG data in JFIF or Exif format"""
+    if h[6:10] in (b'JFIF', b'Exif') or b'JFIF' in h[:23] or h[:2] == b'\xff\xd8':
+        return 'jpeg'
