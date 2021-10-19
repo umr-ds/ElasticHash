@@ -69,7 +69,7 @@
                         enlargedSrc: '{{ images_url }}{{ image.imagepath }}',
                         enlargedWidth: 786,
                         enlargedHeight: 576,
-                        link: '/?imagePath={{ image.imagepath }}&maxResults={{ max_results }}',
+                        link: window.location.origin + window.location.pathname + '?imagePath={{ image.imagepath }}&maxResults={{ max_results }}',
                         linkTarget: '_self',
                         {% if image.imageinfo %}
                             title: 'Title: <b>{{ image.imageinfo.title }}</b> <br /> Author: ' +

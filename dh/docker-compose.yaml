@@ -45,7 +45,7 @@ services:
 
   elasticsearch:
     container_name: dh_elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
     restart: always
     environment:
       - "ES_JAVA_OPTS=-Xms768m -Xmx768m"
@@ -53,6 +53,15 @@ services:
       - "discovery.type=single-node"
     volumes:
       - ./elasticsearch/data/:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nproc: 4096
+      nofile:
+        soft: 65536
+        hard: 65536
+
 
 #volumes:
 #  static-volume:

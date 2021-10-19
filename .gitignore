@@ -136,3 +136,6 @@ dmypy.json
 /experiments/results/
 
 .idea
+
+*.tar.gz
+*.csv

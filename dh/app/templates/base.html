@@ -52,12 +52,14 @@
                                 <input type="file" placeholder="Please select an image for uploading"
                                        name="upload"
                                        id="upload"
-                                       class="form-control-file">
+                                       class="form-control-file"
+                                       onchange="document.getElementById('searchbutton').disabled = false">
                             </div>
                             <div class="tab-pane fade" id="nav-url" role="tabpanel"
                                  aria-labelledby="nav-url-tab"><br/>
                                 <input type="text" placeholder="Please enter URL to image" name="url" id="url"
-                                       class="form-control">
+                                       class="form-control"
+                                       onchange="document.getElementById('searchbutton').disabled = false">
                             </div>
                         </div>
                     </div>
@@ -71,7 +73,9 @@
                 </div>
 
                 <div class="col text-center"><br/>
-                    <button type="submit" class="btn btn-primary align-text-bottom">Search similar images</button>
+                    <button type="submit" class="btn btn-primary align-text-bottom" id="searchbutton" disabled>Search
+                        similar images
+                    </button>
                 </div>
                 <div class="col">
 
@@ -112,6 +116,7 @@
                 document.getElementById("nav-url").classList.add("show");
             }
         }
+
 
         switchTabsIfUseURL();
 

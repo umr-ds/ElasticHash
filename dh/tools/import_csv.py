@@ -219,7 +219,7 @@ if __name__ == '__main__':
         help='Column from where image info starts. As in OpenImages there are 4 columns: license, authorprofileurl,	author,	title (starts with 0, default: 12)'
     )
 
-    parser.add_argument('-c', '--cols', choices=['id', 'imageurl', 'thumburl', 'imagepath', 'imageinfo'], nargs="*",
+    parser.add_argument('-c', '--cols', choices=['id', 'imageurl', 'thumburl', 'imagepath', 'imageinfo', 'license', 'author', 'title', 'authorprofileurl'], nargs="*",
                         default=['id', 'imageurl', 'thumburl'],
                         help='Columns of CSV to use for import.')
 
