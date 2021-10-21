@@ -78,27 +78,36 @@
                                 '<br /><span class="small">This image is listed in ' +
                                 '<a href=https://storage.googleapis.com/openimages/web/index.html>' +
                                 'Open Images Dataset</a> as having a CC BY 2.0 license</span>' +
-                                '<br /><span class="progress-label">Similarity</span>' +
-                                '<div class="progress ">\n' +
-                                '  <div class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
-                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></div>\n' +
-                                '</div>',
+                                '<br /><div class="container">' +
+                                '<div class="row"><div class="col align-self-center"><span class="progress-label">Similarity</span>' +
+                                '<span class="progress ">\n' +
+                                '<span class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
+                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></span>\n' +
+                                '</span></div>' +
+                                '<div class="col-1"><a href="' + window.location.origin + window.location.pathname + '?imagePath={{ image.imagepath }}&maxResults={{ max_results }}' + '" target="_self">' +
+                                '<button type="submit" class="btn btn-primary btn-sm" "="">Search\n' +
+                                '</button></a></div></div></div>',
                         {% else %}
                             title: 'ID: <b>{{ image.imageid }}</b>' +
                                 '<br /><span class="progress-label">Similarity</span>' +
-                                '<div class="progress ">\n' +
-                                '  <div class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
-                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></div>\n' +
-                                '</div>',
+                                '<br /><div class="container">' +
+                                '<div class="row"><div class="col align-self-center"><span class="progress-label">Similarity</span>' +
+                                '<span class="progress ">\n' +
+                                '<span class="progress-bar bg-success" role="progressbar" style="width: {{  (image.score / 256)*100 | int }}%" ' +
+                                'aria-valuenow="{{  image.score | int }}" aria-valuemin="0" aria-valuemax="256"></span>\n' +
+                                '</span></div>' +
+                                '<div class="col-1"><a href="' + window.location.origin + window.location.pathname + '?imagePath={{ image.imagepath }}&maxResults={{ max_results }}' + '" target="_self">' +
+                                '<button type="submit" class="btn btn-primary btn-sm" "="">Search\n' +
+                                '</button></a></div></div></div>',
                         {% endif %}
                         color: '#ccc',
                         },
                     {% endfor %}
             ];
-            gallery.setItems(items);
             gallery.init();
-
+            gallery.addItems(items);
         })
+
 
     </script>
 

@@ -11,12 +11,15 @@
     border-bottom-color: rgb(222, 226, 230);
     border-bottom-style: solid;
     border-bottom-width: 1px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px
 }
 
 .queryimage {
-    height: 110px;
-    max-width: 300px;
     border-radius: 3px;
+    width: 130px;
+    height: 100px;
+    object-fit: scale-down;
 }
 
 .natural-gallery-js .figure {

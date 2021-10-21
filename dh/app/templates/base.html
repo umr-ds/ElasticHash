@@ -38,7 +38,7 @@
             <div class="container-fluid text-primary">
                 <div class="row">
                     <div class="col">
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <div class="nav nav-tabs" id="nav-tab float-left" role="tablist">
                             <a class="nav-item nav-link active" id="nav-upload-tab" data-toggle="tab" href="#nav-upload"
                                role="tab"
                                aria-controls="nav-upload" aria-selected="true" onclick="switchUseURL()">Upload</a>
@@ -64,26 +64,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col text-center">
-                    <div class="form-group mx-sm-3 mb-2 text-center"><br/>
-                        <input type="number" class="form-control" name="maxResults" aria-describedby="maxResultsHelp"
+                <div class="col">
+                    <div class="form-group mx-sm-3 mb-3 text-center" style="width: 150px;">
+                        <input type="number" class="form-control form-control-sm" name="maxResults" aria-describedby="maxResultsHelp"
                                value="{{ max_results }}" width="5">
-                        <small id="maxResultsHelp" class="form-text text-muted w-10">Maximum number of results</small>
+                        <small id="maxResultsHelp" class="form-text text-muted">Number of results</small>
+                        <button type="submit" class="btn btn-primary align-text-bottom w-100 mt-2"" id="searchbutton" disabled>Search
+                    </button>
                     </div>
                 </div>
-
-                <div class="col text-center"><br/>
-                    <button type="submit" class="btn btn-primary align-text-bottom" id="searchbutton" disabled>Search
-                        similar images
-                    </button>
-                </div>
-                <div class="col">
-
-
-                </div>
-                <div class="text-right w-150">
+                <div class="col text-right">
                     {% if query_image %}
-                        <div class="querycontainer">
+                        <div class="querycontainer float-right">
                             <img class="queryimage" id="queryimage" src="{{ query_image }}"/>
                             <div class="querytext">query image</div>
                         </div>
@@ -134,20 +126,17 @@
             // hover, always and never
             showLabels: 'hover',
 
-            // enable lightbox
             lightbox: true,
 
-            // photosipw options
             photoSwipeOptions: null,
 
             // the number of rows to display when gallery initialises
             minRowsAtStart: 4,
 
-            // is selectable?
             selectable: false,
 
             // the distance from the bottom of the gallery to offset the detection of the scroll event.
-            infiniteScrollOffset: 0
+            infiniteScrollOffset: -125
         };
 
         function getGallery(galleryElement, photoswipeRef) {
@@ -166,13 +155,13 @@
 </main>
 <footer class="footer fixed-bottom bg-light border-bottom ml-1 mt-1 mr-1 mb-1">
     <div class="d-flex">
-        <div>
+        <span style="white-space: nowrap; overflow: hidden;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
                  viewBox="0 0 16 16">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
             </svg>
             <a href="https://github.com/umr-ds/ElasticHash/">ElasticHash</a>
-        </div>
+        </span>
         <div class="ml-auto">
             <span class="small">All images are listed in <a
                     href=https://storage.googleapis.com/openimages/web/index.html>Open Images Dataset</a> as having a <a
