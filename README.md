@@ -26,6 +26,30 @@ directory with enough images to index.
 * Run `docker exec dh_app /tools/import_dir.sh`
 * Go to http://localhost
 
+## Demo 
+
+https://uni-marburg.de/ntzdY
+
+## Reference
+
+Reference to cite when you use ElasticHash in a research paper:
+
+```
+@InProceedings{korfhage2021elastichash,
+  title="ElasticHash: Semantic Image Similarity Search by Deep Hashing with Elasticsearch",
+  author={Korfhage, Nikolaus and M{\"u}hling, Markus and Freisleben, Bernd},
+  booktitle="Computer Analysis of Images and Patterns",
+  year="2021",
+  publisher="Springer International Publishing",
+  pages="14--23",
+}
+```
+
+## License
+
+ElasticHash is MIT-licensed
+
 ## Credits
 
-The demo app uses [Natural Gallery JS](https://github.com/Ecodev/natural-gallery-js)
+The demo app uses [Natural Gallery JS](https://github.com/Ecodev/natural-gallery-js) and [PhotoSwipe](https://photoswipe.com/) and images from the [Open Images dataset](https://storage.googleapis.com/openimages/web/index.html)
+
