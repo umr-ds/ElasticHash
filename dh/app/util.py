@@ -133,9 +133,9 @@ def resize_and_crop(image, new_width, new_height, crop=True):
     return image
 
 
-def allowed_file(filename):
+def allowed_file(filename, allowed_ext=cfg.ALLOWED_EXT):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in cfg.ALLOWED_EXT
+        filename.rsplit('.', 1)[1].lower() in allowed_ext
 
 
 def parse_es_results(json_str):

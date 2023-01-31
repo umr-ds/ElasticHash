@@ -1,5 +1,5 @@
 import os
-
+import logging
 
 def get_env(env, default=""):
     env_val = os.environ.get(env)
@@ -25,8 +25,8 @@ class Config:
         EL_QUERY_TPL = file.read()
 
     # Image settings
-    IMG_WIDTH = 300
-    IMG_HEIGHT = 300
+    IMG_WIDTH = int(get_env("IMG_WIDTH", 300))
+    IMG_HEIGHT = int(get_env("IMG_HEIGHT", 300))
 
     # Inference
     TF_SERVING_HOST = get_env("TF_SERVING_HOST", "tf-serving")
@@ -34,6 +34,5 @@ class Config:
     TF_MODELNAME = get_env("TF_MODELNAME", "model")
 
 
-import logging
 
 logger = logging.Logger("logs")
