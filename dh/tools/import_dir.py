@@ -33,17 +33,20 @@ es_index_tpl_str = """
     "number_of_shards": 3
   },
   "mappings": {
-      "properties": {
-        %s
-        "f0": {"type": "keyword"},
-        "f1": {"type": "keyword"},
-        "f2": {"type": "keyword"},
-        "f3": {"type": "keyword"},
-        "r0": {"type": "long"},
-        "r1": {"type": "long"},
-        "r2": {"type": "long"},
-        "r3": {"type": "long"}
-      }
+      "_doc": {
+          "properties": {
+           "type": { "type": "keyword" }, 
+            %s
+            "f0": {"type": "keyword"},
+            "f1": {"type": "keyword"},
+            "f2": {"type": "keyword"},
+            "f3": {"type": "keyword"},
+            "r0": {"type": "long"},
+            "r1": {"type": "long"},
+            "r2": {"type": "long"},
+            "r3": {"type": "long"}
+          }
+        }
     }
 }
   """
@@ -147,13 +150,30 @@ if __name__ == '__main__':
         '--images_dir',
         default="images",
         type=str,
-        help='Directory containing keyframes'
+        help='Directory containing images'
     )
+
+    parser.add_argument(
+        '--allowed_files',
+        choices=["png", "jpg", "jpeg", "gif", "bmp", "tiff", "tif"], nargs="*",
+        default=["png", "jpg", "jpeg", "gif", "bmp", "tiff", "tif"],
+        help='Image extensions'
+    )
+
+    parser.add_argument(
+        '--filter_prefix',
+        default="",
+        type=str,
+        help='Consider only files beginning with prefix'
+    )
+
 
     args = parser.parse_args()
 
     image_dir = args.images_dir
     es_index = args.es_index
+    allowed_files = args.allowed_files
+    filter_prefix = args.filter_prefix
 
     pathes = []
 
@@ -161,10 +181,11 @@ if __name__ == '__main__':
 
     for root, dirs, files in os.walk(image_dir):
         for filename in files:
-            if (allowed_file(filename)):
-                path = os.path.join(os.path.relpath(root, image_dir), filename)
-                print ("Adding " + path)
-                pathes.append(path)
+            if (allowed_file(filename,allowed_ext=allowed_files)):
+                if filename.startswith(filter_prefix):
+                    path = os.path.join(os.path.relpath(root, image_dir), filename)
+                    print ("Adding " + path)
+                    pathes.append(path)
 
     #    pathes = pathes[:10000]
 

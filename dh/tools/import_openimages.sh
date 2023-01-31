@@ -17,3 +17,5 @@ echo "Importing OpenImages codes..."
 python3 import_csv.py --es_reset_index --csv train.csv --cols id imageurl thumburl imagepath imageinfo authorprofileurl author title license
 # python3 import_csv.py --csv val.csv --cols id imageurl thumburl imagepath imageinfo authorprofileurl author title license
 
+python3 import_csv.py --es_reset_index --csv train.csv --cols id imageurl thumburl imagepath imageinfo authorprofileurl author title license
+

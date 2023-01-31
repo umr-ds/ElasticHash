@@ -2,6 +2,10 @@
 
 Semantic Image Similarity Search in Elasticsearch
 
+## Demo 
+
+https://uni-marburg.de/ntzdY
+
 ## Usage
 
 Perform image similarity search on ~7M images of the OpenImages dataset.
@@ -14,21 +18,26 @@ Perform image similarity search on ~7M images of the OpenImages dataset.
 * Download OpenImages ES index and import data into ES: `docker exec dh_app /tools/import_openimages.sh`
 * Go to http://localhost
 
-## Index custom image dataset
+## Custom image dataset
 
 You can also perform image similarity search on a custom image dataset. However, for reasonable results, this requires a
 directory with enough images to index.
 
 * Go to app directory `cd dh`
-* Modify `docker-compose.yaml`: Add `- path/to/mage_dir/:/app/static/images/` for a path to a folder containing images
+* Customize `docker-compose.yaml`: Add `- path/to/mage_dir/:/app/static/images/` for a path to a folder containing images
   to `app`
 * Start containers `docker-compose up -d`
-* Run `docker exec dh_app /tools/import_dir.sh`
+* Customize and run `docker exec dh_app /tools/import_dir.sh`
 * Go to http://localhost
 
-## Demo 
+## Custom model
 
-https://uni-marburg.de/ntzdY
+You can also use a custom deep hashing model (e.g. for other domains). For an example how to convert a Keras model for 
+tensorflow serving see ``
+
+## Troubleshooting
+
+If the elasticsearch container won't start its probably a permissions issue: `sudo chown 1000:1000 -R dh/elasticsearch/data/`
 
 ## Reference
 
