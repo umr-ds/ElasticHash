@@ -1,0 +1,184 @@
+# Nginx
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-conf
+data:
+  default.conf.template: |
+    upstream app {
+        server app:8000;
+    }
+
+    server {
+        listen 80;
+        client_max_body_size 2G;
+        keepalive_timeout  65;
+        location / {
+            proxy_pass http://app;
+            proxy_read_timeout 300;
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: dh-nginx
+spec:
+  selector:
+    matchLabels:
+      app: dh-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dh-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/templates/default.conf.template
+              name: vol-nginx-conf
+              subPath: default.conf.template
+            - mountPath: /usr/src/app/static
+              name: vol-static-volume
+              readOnly: true
+      volumes:
+        - configMap:
+            defaultMode: 420
+            name: nginx-conf
+          name: vol-nginx-conf
+        - hostPath:
+            path: /path/to/nginx/static
+            type: ""
+          name: vol-static-volume
+---
+# Tensorflow serving
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tfs
+  labels:
+    app: dh-tfs
+spec:
+  selector:
+    matchLabels:
+      app: dh-tfs
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dh-tfs
+    spec:
+      containers:
+        - name: tf-serving
+          image: tensorflow/serving:2.4.0-gpu
+          imagePullPolicy: Always
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "7"
+            - name: MODEL_NAME
+              value: "export"
+            - name: MODEL_BASE_PATH
+              value: "/data/models/"
+          volumeMounts:
+            - mountPath: /data
+              name: vol-dh
+      volumes:
+        - hostPath:
+            path: /path/to/dh
+            type: ""
+          name: vol-dh
+# Web GUI
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: dh-app
+spec:
+  selector:
+    matchLabels:
+      app: dh-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dh-app
+    spec:
+      containers:
+        - name: app
+          image: hnko/dh_app 
+          imagePullPolicy: Always
+          env:
+            - name: TF_SERVING_HOST
+              value: "tf-serving"
+            - name: TF_SERVING_PORT
+              value: "8501"
+            - name: TF_MODELNAME
+              value: "export"
+            - name: GUNICORN_WORKERS
+              value: "4"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: dh-app
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+  selector:
+    app: dh-app
+---
+apiVersion: v1
+kind: Service/dh
+metadata:
+  name: tf-serving
+  labels:
+    app: dh-tfs
+spec:
+  ports:
+    - port: 8501
+      targetPort: 8501
+      protocol: TCP
+  selector:
+    app: dh-tfs
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx
+      labels:
+        app: dh-nginx
+    spec:
+      ports:
+        - port: 80
+          targetPort: 80
+          protocol: TCP
+      selector:
+        app: dh-nginx
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx-exposed
+      labels:
+        app: dh-nginx-exposed
+    spec:
+      type: NodePort
+      ports:
+        - port: 80
+          targetPort: 80
+          nodePort: 9376
+      selector:
+        app: dh-nginx
