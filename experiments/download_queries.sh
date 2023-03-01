@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 echo "Downloading queries.."
-wget -O  queries.zip https://pc12439.mathematik.uni-marburg.de/nextcloud/s/zJAAZSwyqZfCYcf/download
+wget -O  queries.zip https://hessenbox.uni-marburg.de/dl/fiBUXEoHiizwzxLv5HGRnY/val_queries.zip
 echo "Extracting..."
 unzip queries.zip -d queries  && rm queries.zip
 

@@ -1,19 +1,21 @@
 # ElasticHash: Semantic Image Similarity Search in Elasticsearch
 
-ElasticHash uses ElasticSearch for high-quality, efficient, and large-scale semantic image similarity search. 
+ElasticHash uses Elasticsearch for high-quality, efficient, and large-scale semantic image similarity search. 
 It is based on a deep hashing model to learn hash codes for fine-grained image similarity search in natural images and a
 two-stage method for efficiently searching binary hash codes using Elasticsearch (ES). 
 In the first stage, a coarse search based on short hash codes is performed using multi-index hashing and ES terms lookup 
 of neighboring hash codes. In the second stage, the list of results is re-ranked by computing the Hamming distance on 
 long hash codes.
 
-![Demo](images/system.png)
+More details can be found in the [slides](/ElasticHash_slides.pdf).
+
+![System](images/system.png)
 
 ## Demo 
 
-![Demo](images/demo.png)
-
 https://uni-marburg.de/ntzdY
+
+![Demo](images/demo.png)
 
 ## Usage
 
@@ -29,8 +31,8 @@ Perform image similarity search on ~7M images of the OpenImages dataset.
 
 ## Custom image dataset
 
-You can also perform image similarity search on a custom image dataset. However, for reasonable results, this requires a
-directory with enough images to index.
+You can use the system to perform image similarity search on a custom natural image dataset. However, for reasonable 
+results, this requires a directory with enough images to index.
 
 * Go to app directory `cd dh`
 * Customize `docker-compose.yaml`: Add `- path/to/mage_dir/:/app/static/images/` for a path to a folder containing images
@@ -41,8 +43,12 @@ directory with enough images to index.
 
 ## Custom model
 
-You can also use a custom deep hashing model (e.g. for other domains). For an example how to convert a Keras model for 
-tensorflow serving see ``
+You can also use a custom deep hashing model (e.g. for other domains). More information on how to convert a Keras model for 
+ElasticHash can be found [here](/model/README.md)
+
+# Experiments
+
+Experiments can be found [here](/experiments/README.md)
 
 ## Troubleshooting
 
@@ -69,5 +75,7 @@ ElasticHash is MIT-licensed
 
 ## Credits
 
-The demo app uses [Natural Gallery JS](https://github.com/Ecodev/natural-gallery-js) and [PhotoSwipe](https://photoswipe.com/) and images from the [Open Images dataset](https://storage.googleapis.com/openimages/web/index.html)
+The demo app uses [Natural Gallery JS](https://github.com/Ecodev/natural-gallery-js) and
+[PhotoSwipe](https://photoswipe.com/) and images from the 
+[Open Images dataset](https://storage.googleapis.com/openimages/web/index.html)
 
