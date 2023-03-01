@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 echo "Downloading codes..."
-wget -O  codes.tar.gz https://pc12439.mathematik.uni-marburg.de/nextcloud/s/APKg3gLT5Q9rPko/download
+wget -O  codes.tar.gz https://hessenbox.uni-marburg.de/dl/fiHjZrgFkb6P6yLFpoFn1X/oi_codes.tar.gz
 echo "Extracting codes..."
 tar -xf codes.tar.gz
 rm codes.tar.gz

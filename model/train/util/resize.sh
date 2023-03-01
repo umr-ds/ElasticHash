@@ -1,1 +1,0 @@
-find ImageNet/unpacked_more_than_1000/ -name '*.JPEG' -execdir mogrify -resize 300x {} \; ;find Places/data_large_extra/ Places/val_large Places/data_large -name '*.jpg' -execdir mogrify -resize 300x {} \;

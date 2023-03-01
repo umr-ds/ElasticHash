@@ -1,8 +1,17 @@
-# ElasticHash
+# ElasticHash: Semantic Image Similarity Search in Elasticsearch
 
-Semantic Image Similarity Search in Elasticsearch
+ElasticHash uses ElasticSearch for high-quality, efficient, and large-scale semantic image similarity search. 
+It is based on a deep hashing model to learn hash codes for fine-grained image similarity search in natural images and a
+two-stage method for efficiently searching binary hash codes using Elasticsearch (ES). 
+In the first stage, a coarse search based on short hash codes is performed using multi-index hashing and ES terms lookup 
+of neighboring hash codes. In the second stage, the list of results is re-ranked by computing the Hamming distance on 
+long hash codes.
+
+![Demo](images/system.png)
 
 ## Demo 
+
+![Demo](images/demo.png)
 
 https://uni-marburg.de/ntzdY
 
