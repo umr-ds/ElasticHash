@@ -15,10 +15,10 @@ The codes are then decorrelated and 64 bit and a 256 bit layer added.
 * Specify the following settings
     ```  
     # Directory with images in subdirs
-    IMAGE_DIR=/mnt/lei/cropped_detections/
+    IMAGE_DIR=/path/to/image_dir/
   
     # Path to the trained Keras model (*.keras)
-    TRAINED_MODEL=/mnt/panq/tartaros_thalia_bellafkir/lei/checkpoints_phase2/r2.weights.e006b596l2.92.keras
+    TRAINED_MODEL=/path/to/model.keras
   
     GPU_IDS=0
   

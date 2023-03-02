@@ -78,8 +78,8 @@ def es_add_batch_to_index(batch):
     s = ""
     for id in batch:
         code_dict = {"nbs": get_nbs(id, masks).tolist()} 
-        s += """{ "index": { "_id":"%s", "_index":"%s", "_type" : "data" } }
-    """ % (id, es_index,)
+        s += """{ "index": { "_id":"%s", "_index":"%s" } }
+    """ % (id, es_index,) # , "_type" : "data"
         s += json.dumps(code_dict).replace('\n', ' ') + "\n"  # Needs to be 1 line for ES bulk api!
     r = requests.post(es_url + "/" + es_index + "/_bulk", s, headers={"Content-Type": "application/x-ndjson"})
     jr = json.loads(r.text)

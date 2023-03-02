@@ -48,7 +48,7 @@ services:
 
   elasticsearch:
     container_name: dh_elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
     restart: always
     environment:
       - "ES_JAVA_OPTS=-Xms768m -Xmx768m"
