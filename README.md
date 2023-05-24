@@ -46,9 +46,9 @@ results, this requires a directory with enough images to index.
 You can also use a custom deep hashing model (e.g. for other domains). More information on how to convert a Keras model for 
 ElasticHash can be found [here](/model/README.md)
 
-## Experiments
+## Experiments and data
 
-Experiments can be found [here](/experiments/README.md)
+Experiments can be found [here](/experiments/README.md) and datasets and models [here](https://data.uni-marburg.de/handle/dataumr/233)
 
 ## Troubleshooting
 

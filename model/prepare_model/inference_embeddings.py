@@ -1,37 +1,25 @@
-import sys
-import os
-import time
-import threading
 import argparse
-import traceback
-import urllib3
-import progressbar
+import base64
 import csv
+import io
+import os
 import queue
+import threading
+import time
+import traceback
+
+import numpy as np
+import progressbar
+import urllib3
+
 # from settings import *
 from config import Config as cfg
-import numpy as np
 from util import load_image, resize_and_crop, tf_inference
-import io
-import base64
-
-
-def get_hashcode_string(floatarr):
-    """
-    Construct hashcode from layer output (np array)
-    :param floatarr: np.array
-    :return: string
-    """
-    code = (floatarr > 0).astype(np.int)
-    s = "".join(map(str, code))
-    return s
-
 
 urllib3.disable_warnings()
 
 q = queue.Queue()
 
-lock_outfile = threading.Lock()
 lock_errorfile = threading.Lock()
 count = 0
 pb_widgets = [progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()]
@@ -57,8 +45,6 @@ def process_batch_tf(batch):
         except:
             lock_errorfile.acquire()
             with open(error_list, mode='a') as f:
-                # csv_writer = csv.writer(f, delimiter=sep, quoting=csv.QUOTE_NONE)
-                # csv_writer.writerow(row + [ traceback.format_exc() ])
                 f.write(traceback.format_exc() + "\n")
             with open(failed_list, mode='a') as f:
                 csv_writer = csv.writer(f, delimiter=sep, quoting=csv.QUOTE_NONE)
@@ -66,18 +52,18 @@ def process_batch_tf(batch):
             lock_errorfile.release()
 
     # Batch inference
-    rows_with_codes = []
+    rows_with_vectors = []
     try:
         codes = tf_inference(imgs_b64, protocol, cfg.TF_SERVING_HOST, cfg.TF_SERVING_PORT, cfg.TF_MODELNAME)
         for row, code in zip(valid_rows, codes):
-            rows_with_codes.append(row + [get_hashcode_string(code)])
+            rows_with_vectors.append((row, code))
     except:
         lock_errorfile.acquire()
         with open(error_list, mode='a') as f:
             f.write(traceback.format_exc() + "\n")
         lock_errorfile.release()
 
-    return rows_with_codes
+    return rows_with_vectors
 
 
 def worker():
@@ -85,24 +71,29 @@ def worker():
         batch = q.get()
         if batch is None:
             break
-        new_rows = process_batch_method(batch)
+        rows_with_vectors = process_batch_tf(batch)
         global count
         global bar
-        lock_outfile.acquire()
+
         count += num_files_per_request
         count = count if count <= num_files_total else num_files_total
         bar.update(count)
-        with open(output_list, mode='a') as f:
-            csv_writer = csv.writer(f, delimiter=sep, quoting=csv.QUOTE_NONE)
-            for row in new_rows:
-                csv_writer.writerow(row)
-        lock_outfile.release()
+
+        for row, vec in rows_with_vectors:
+            img_path = row[col]
+            path, filename = os.path.split(img_path)
+            output_path = os.path.join(output_dir, path)
+            os.makedirs(output_path, exist_ok=True)
+            base, _ = os.path.splitext(filename)
+            np.save(os.path.join(output_path, base + ".npy"), vec['code256'])
+
         q.task_done()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Process a list of images (csv) and return the list with a hashcode appended to each entry.')
+        description='Process a list of images (csv) and write embeddings as npy to output directory keeping relative '
+                    'pathes.')
     parser.add_argument(
         '--num_threads',
         default=4,
@@ -123,10 +114,10 @@ if __name__ == '__main__':
         help='Path to input list containing image pathes'
     )
     parser.add_argument(
-        '--output_list',
+        '--output_dir',
         type=str,
         required=True,
-        help='Path to output list'
+        help='Path to embeddings'
     )
     parser.add_argument(
         '--image_dir',
@@ -161,9 +152,9 @@ if __name__ == '__main__':
     port = cfg.TF_SERVING_PORT
     https = args.https
     input_list = args.input_list
-    output_list = args.output_list
-    error_list = output_list + ".errors"
-    failed_list = output_list + ".failed"
+    output_dir = args.output_dir
+    error_list = input_list + ".errors"
+    failed_list = input_list + ".failed"
     image_dir = args.image_dir
     sep = args.sep
     col = args.col
@@ -203,8 +194,7 @@ if __name__ == '__main__':
     threads = []
     print("Processing images...")
 
-    with open(output_list, mode='w') as f:
-        f.write("")
+    os.makedirs(output_dir, exist_ok=True)
 
     with open(error_list, mode='w') as f:
         f.write("")
@@ -212,7 +202,7 @@ if __name__ == '__main__':
     with open(failed_list, mode='w') as f:
         f.write("")
 
-    bar = progressbar.ProgressBar(maxval=num_files_total, \
+    bar = progressbar.ProgressBar(maxval=num_files_total,
                                   widgets=pb_widgets)
 
     bar.start()
