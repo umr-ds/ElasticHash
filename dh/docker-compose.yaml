@@ -13,7 +13,7 @@ services:
       - TF_SERVING_HOST=tf-serving
       - TF_SERVING_PORT=8501
       - TF_MODELNAME=${TF_MODELNAME}
-      - GUNICORN_WORKERS=4
+      - GUNICORN_WORKERS=5
       - IMG_WIDTH=300
       - IMG_HEIGHT=300
 
@@ -48,7 +48,8 @@ services:
 
   elasticsearch:
     container_name: dh_elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.4 # 7.17.13 #8.10.4
+    # First upgrade to 7.17, see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html
     restart: always
     environment:
       - "ES_JAVA_OPTS=-Xms768m -Xmx768m"

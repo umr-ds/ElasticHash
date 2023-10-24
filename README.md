@@ -17,6 +17,12 @@ https://uni-marburg.de/ntzdY
 
 ![Demo](images/demo.png)
 
+## Install
+
+If you don't need the whole system but only the Elasticsearch index please use [elastichash](https://github.com/nik-ko/elastichash/) package:
+
+`pip install elastichash`
+
 ## Usage
 
 Perform image similarity search on ~7M images of the OpenImages dataset.

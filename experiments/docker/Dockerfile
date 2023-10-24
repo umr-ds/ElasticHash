@@ -1,4 +1,4 @@
-FROM python:3.7.3-slim
+FROM python:3.10
 RUN apt update && apt install -y wget libpq-dev python-dev build-essential gcc
 RUN pip install --upgrade pip
 RUN pip3 install \

@@ -19,7 +19,7 @@ def get_hashcode_str(floatarr):
     :param floatarr: np.array
     :return: string
     """
-    code = (floatarr > 0).astype(np.int)
+    code = (floatarr > 0).astype(int)
     s = "".join(map(str, code))
     return s
 
