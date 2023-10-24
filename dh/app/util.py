@@ -239,6 +239,10 @@ def es_query(query, max_results):
     return requests.post(cfg.ES_URL + str(min(cfg.ES_MAX_RESULTS, max_results)), data=query,
                          headers={"Content-Type": "application/json"}, verify=False).text
 
+def es_count():
+    res = requests.get(cfg.ES_URL.replace("_search?size=", "_count"), verify=False).text
+    return '{:,}'.format(json.loads(res))
+
 
 def monkeypatch_imghdr():
     """

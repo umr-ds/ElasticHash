@@ -1,4 +1,4 @@
-from util import allowed_file, batch_inference, parse_es_results, es_query_str, es_query, load_image, monkeypatch_imghdr
+from util import allowed_file, batch_inference, parse_es_results, es_query_str, es_query, es_count, load_image, monkeypatch_imghdr
 from config import Config as cfg
 import requests
 from flask import Flask, request, jsonify, render_template
@@ -142,9 +142,11 @@ def search():
     except Exception as e:
         logger.error(e, exc_info=True)
 
+    num_db_images = es_count()
+
     return render_template('index.html', useURL=useURL, images=images, query_image=query_image, error=error,
                            time=querytime, display_welcome=not perform_search, max_results=max_results,
-                           thumbs_url=cfg.THUMBS_URL, images_url=cfg.IMAGES_URL)
+                           thumbs_url=cfg.THUMBS_URL, images_url=cfg.IMAGES_URL, num_db_images=num_db_images)
 
 
 @app.route('/infer/', methods=['POST', 'GET'])
