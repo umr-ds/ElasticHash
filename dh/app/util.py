@@ -241,7 +241,7 @@ def es_query(query, max_results):
 
 def es_count():
     res = requests.get(cfg.ES_URL.replace("_search?size=", "_count"), verify=False).text
-    return '{:,}'.format(json.loads(res))
+    return '{:,}'.format(json.loads(res)["count"])
 
 
 def monkeypatch_imghdr():
