@@ -1,4 +1,4 @@
-FROM python:3.11 
+FROM python:3.11.6-slim  
 RUN apt update && apt install -y wget
 # RUN python -m pip install --upgrade --force-reinstall pip
 COPY app/requirements.txt .

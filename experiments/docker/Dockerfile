@@ -1,4 +1,4 @@
-FROM python:3.11 
+FROM python:3.11.6-slim  
 RUN apt update && apt install -y wget libpq-dev python-dev build-essential gcc
 RUN pip install --upgrade pip
 RUN pip3 install \
