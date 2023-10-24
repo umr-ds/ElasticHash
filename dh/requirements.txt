@@ -1,7 +1,7 @@
 flask
 requests
 gunicorn
-numpy
-pillow
+numpy>=1.22.2
+pillow>=10.0.1
 bitstring
 progressbar
