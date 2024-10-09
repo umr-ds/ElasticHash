@@ -45,7 +45,7 @@ def gen_masks(l=16, d=2):
     ids = range(l)
     for r in range(1, d + 1):
         combs += list(combinations(ids, r))
-    masks = np.zeros((len(combs), l), dtype=np.int)
+    masks = np.zeros((len(combs), l), dtype=int)
     for i, c in enumerate(combs):
         masks[i, c] = 1
     masks_str = [(np.uint16)(binstr2uint("0" * l))] + [(np.uint16)(binstr2uint("".join(m))) for m in masks.astype(str)]
